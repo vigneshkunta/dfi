@@ -61,7 +61,7 @@ const About = () => {
             </div>
           </div>
         </section>
-        <section className="bg-[#f9f7f1] min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-24">
+        <section className="bg-[#F6F4EE] min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-24">
           <div className="max-w-4xl text-center">
             <p className="text-[#e86b34] text-base sm:text-lg font-semibold tracking-wide uppercase mb-4">
               Our Journey
@@ -104,7 +104,7 @@ const About = () => {
             </p>
           </div>
         </section>
-        <section className="bg-[#f9f7f1] py-24 px-4 sm:px-6 lg:px-24">
+        <section className="bg-[#F6F4EE] py-24 px-4 sm:px-6 lg:px-24">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left - Image & Decorative Elements */}
             <div className="relative flex justify-center">
@@ -182,7 +182,7 @@ const About = () => {
             </div>
           </div>
         </section>
-        <section className="bg-[#292a77] py-10 px-4 sm:px-10 lg:px-20">
+        <section className="bg-[#312E81] py-10 px-4 sm:px-10 lg:px-20">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10">
             {/* Left: Logo + Text */}
             <div className="flex items-center gap-5">
@@ -231,7 +231,7 @@ const About = () => {
           </div>
         </section>
 
-        <section className="bg-[#f9f7f1] py-20 px-4 sm:px-10 lg:px-20">
+        <section className="bg-[#F6F4EE] py-20 px-4 sm:px-10 lg:px-20">
           <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
             {/* Static DJ Image */}
             <div className="w-full lg:w-1/2 flex justify-center">
