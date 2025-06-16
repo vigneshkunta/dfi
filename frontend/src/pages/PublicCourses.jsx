@@ -77,7 +77,7 @@ const courses = [
   },
 ];
 
-const Courses = () => {
+const PublicCourses = () => {
   return (
     <main className="bg-white text-gray-900 font-sans">
       <section
@@ -244,4 +244,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default PublicCourses;
