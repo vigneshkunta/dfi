@@ -62,7 +62,7 @@ const benefits = [
   },
 ];
 
-const Licenses = () => {
+const PublicLicenses = () => {
   return (
     <>
       <Helmet>
@@ -283,4 +283,4 @@ const Licenses = () => {
   );
 };
 
-export default Licenses;
+export default PublicLicenses;
