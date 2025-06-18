@@ -1,28 +1,18 @@
-import express from 'express';
+import { Router } from "express";
 import { 
   registerUser, 
   loginUser, 
   logoutUser, 
-  addToWishlist, 
-  enrollCourse, 
-  getOrderHistory, 
-  updateProfile, 
-  giveReview 
 } from '../controllers/user.controller.js';
-import { protect, admin } from '../middleware/authMiddleware.js';
-
-const router = express.Router();
+import { verifyJWT } from "../middleware/auth.middleware.js";
+const router = Router();
 
 // User authentication routes
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.get('/logout', logoutUser);
 
-// User profile and activity routes
-router.post('/wishlist', protect, addToWishlist);
-router.post('/enroll', protect, enrollCourse);
-router.get('/order-history', protect, getOrderHistory);
-router.put('/update-profile', protect, updateProfile);
-router.post('/review', protect, giveReview);
+// secured routes
+router.post('/logout', logoutUser);
+
 
 export default router;

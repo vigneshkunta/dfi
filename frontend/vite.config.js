@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     viteCompression({
-      algorithm: "brotliCompress", // or 'gzip'
+      algorithm: "brotliCompress",
       ext: ".br",
       deleteOriginFile: false,
     }),
@@ -22,7 +22,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"], // chunk splitting
+          vendor: ["react", "react-dom", "react-router-dom"],
         },
       },
     },
@@ -30,6 +30,15 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
+    },
+  },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:3000", 
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 });

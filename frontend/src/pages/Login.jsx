@@ -1,36 +1,81 @@
-// src/pages/Login.jsx
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+  loginUser,
+} from "../redux/user/userSlice";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: "", variant: "" });
+
+  const { loading } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const showToast = (message, variant = "danger") => {
+    setToast({ show: true, message, variant });
+    setTimeout(() => setToast((prev) => ({ ...prev, show: false })), 3000);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Simulated login logic
-    if (form.email === "admin@example.com" && form.password === "admin") {
-      localStorage.setItem("token", "your_token_here");
-      navigate("/dashboard");
-    } else {
-      alert("Invalid credentials");
+    if (!form.email || !form.password) {
+      showToast("Please fill all fields", "danger");
+      return;
+    }
+
+    try {
+      dispatch(signInStart());
+
+      const resultAction = await dispatch(
+        loginUser({
+          usernameOrEmail: form.email.trim(),
+          password: form.password.trim(),
+        })
+      );
+
+      if (loginUser.rejected.match(resultAction)) {
+        showToast(resultAction.payload || resultAction.error.message, "danger");
+        dispatch(signInFailure(resultAction.payload));
+      } else {
+        showToast("Login successful", "success");
+        dispatch(signInSuccess(resultAction.payload));
+        navigate("/");
+      }
+    } catch (error) {
+      dispatch(signInFailure(error.message));
+      showToast(error.message, "danger");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="min-h-screen flex items-center justify-center bg-white relative">
+      {toast.show && (
+        <div
+          className={`absolute top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded shadow-md text-white ${
+            toast.variant === "success" ? "bg-green-600" : "bg-red-600"
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
+
       <div className="bg-white shadow-xl rounded-2xl p-10 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">
           Hi, Welcome!
         </h2>
         <p className="text-center text-gray-500 text-sm mb-6">
-          Don't have an account?{" "}
+          Don’t have an account?{" "}
           <a href="/signup" className="text-indigo-600 font-medium">
             Register Now
           </a>
@@ -48,11 +93,11 @@ const Login = () => {
               type="text"
               id="email"
               name="email"
-              placeholder="Username or Email Address"
               value={form.email}
               onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Username or Email Address"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
 
@@ -68,39 +113,27 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
-                placeholder="Password"
                 value={form.password}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Password"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
               <span
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-4 cursor-pointer text-gray-400 hover:text-gray-700"
+                className="absolute right-3 top-4 cursor-pointer text-gray-400 hover:text-gray-700 select-none"
               >
                 {showPassword ? "🙈" : "👁️"}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-              />
-              <span className="ml-2 text-sm text-gray-600">Save account</span>
-            </label>
-            <a href="#" className="text-sm text-indigo-600 hover:underline">
-              Forgot Password?
-            </a>
-          </div>
-
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50"
+            disabled={loading}
           >
-            Sign In
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
       </div>

@@ -1,5 +1,9 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const { Schema } = mongoose;
 
@@ -8,18 +12,18 @@ const userSchema = new Schema(
     firstName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     lastName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     username: {
       type: String,
       required: true,
       unique: true,
-      trim: true
+      trim: true,
     },
     email: {
       type: String,
@@ -27,165 +31,168 @@ const userSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      validate: {
-        validator: (value) => /^[a-z0-9]+@[a-z0-9]+\.[a-z]{2,3}$/.test(value),
-        message: 'Invalid email format'
-      }
     },
     phone: {
       type: String,
-      required: true,
       unique: true,
       validate: {
         validator: (value) => /^[0-9]{10}$/.test(value),
-        message: 'Invalid phone number format'
-      }
+        message: "Invalid phone number format",
+      },
     },
     password: {
       type: String,
       required: true,
-      minlength: 6
     },
     profilePic: {
       type: String,
-      default: ''
+      default: "",
     },
     coverPic: {
       type: String,
-      default: ''
+      default: "",
     },
     bio: {
       type: String,
-      default: ''
+      default: "",
     },
     occupation: {
       type: String,
-      default: ''
+      default: "",
     },
     wishlist: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Course'
-      }
+        ref: "Course",
+      },
     ],
     activeCourses: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Course'
-      }
+        ref: "Course",
+      },
     ],
     enrolledCourses: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Course'
-      }
+        ref: "Course",
+      },
     ],
     completedCourses: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Course'
-      }
+        ref: "Course",
+      },
     ],
     reviews: [
       {
         course: {
           type: Schema.Types.ObjectId,
-          ref: 'Course'
+          ref: "Course",
         },
         rating: {
           type: Number,
           min: 1,
-          max: 5
+          max: 5,
         },
         comment: {
           type: String,
-          required: true
         },
         createdAt: {
           type: Date,
-          default: Date.now
-        }
-      }
+          default: Date.now,
+        },
+      },
     ],
     orderHistory: [
       {
         course: {
           type: Schema.Types.ObjectId,
-          ref: 'Course'
+          ref: "Course",
         },
         purchasedAt: {
           type: Date,
-          default: Date.now
+          default: Date.now,
         },
         price: {
           type: Number,
-          required: true
-        }
-      }
+        },
+      },
     ],
     shoppingCart: [
       {
         course: {
           type: Schema.Types.ObjectId,
-          ref: 'Course'
+          ref: "Course",
         },
         addedAt: {
           type: Date,
-          default: Date.now
-        }
-      }
+          default: Date.now,
+        },
+      },
     ],
     socialLinks: {
       facebook: {
         type: String,
-        default: ''
+        default: "",
       },
       twitter: {
         type: String,
-        default: ''
+        default: "",
       },
       linkedin: {
         type: String,
-        default: ''
+        default: "",
       },
       website: {
         type: String,
-        default: ''
+        default: "",
       },
       github: {
         type: String,
-        default: ''
+        default: "",
       },
       instagram: {
         type: String,
-        default: ''
+        default: "",
       },
       youtube: {
         type: String,
-        default: ''
-      }
+        default: "",
+      },
     },
     isAdmin: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
 
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
-userSchema.methods.comparePassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+userSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password);
 };
 
-const User = mongoose.model('User', userSchema);
+userSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+      email: this.email,
+      username: this.username,
+      isAdmin: this.isAdmin,
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+  );
+};
 
-export default User;
+
+export const User = mongoose.model("User",userSchema);

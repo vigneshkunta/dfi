@@ -36,9 +36,9 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+app.use("/api/user", userRoutes);
+app.use("/api/course", courseRoutes);
+app.use("/api/event", eventRoutes);
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "frontend", "dist")));

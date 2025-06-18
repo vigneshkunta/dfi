@@ -12,11 +12,18 @@ import {
   Trophy,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
-import { Link, useLocation, Outlet } from "react-router-dom";
+import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../redux/user/userSlice";
+import { useSelector } from "react-redux";
 
 export default function Dashboard() {
   const { user } = useAuth();
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   const navItems = [
     { label: "Dashboard", icon: <User />, path: "/dashboard" },
@@ -32,7 +39,7 @@ export default function Dashboard() {
       icon: <ShoppingBag />,
       path: "/dashboard/orders",
     },
-    { label: "Logout", icon: <LogOut />, path: "/logout" },
+    { label: "Logout", icon: <LogOut /> },
   ];
 
   const adminItems = [
@@ -50,12 +57,25 @@ export default function Dashboard() {
     { label: "Blog", icon: <Newspaper />, path: "/dashboard/admin/blog" },
   ];
 
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      navigate("/");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
+  const handleNavClick = (e, item) => {
+    if (item.label === "Logout") {
+      e.preventDefault();
+      handleLogout();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-indigo-50">
-      {/* Cover Section */}
-      {/* Cover Section */}
       <section className="relative h-72 sm:h-80 lg:h-96 rounded-b-[3rem] shadow-xl overflow-hidden flex items-center justify-center bg-[#3A57D8]">
-        {/* Background Image with dark overlay */}
         <div
           className="absolute inset-0"
           style={{
@@ -65,9 +85,7 @@ export default function Dashboard() {
             zIndex: 0,
           }}
         />
-        <div className="absolute inset-0 bg-black/40 z-0" />{" "}
-        {/* Overlay layer */}
-        {/* Content */}
+        <div className="absolute inset-0 bg-black/40 z-0" />
         <div className="z-10 text-center text-white px-4">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-2">
             Madhav
@@ -78,16 +96,13 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* User Icon Bubble */}
       <div className="relative z-30 -mt-16 flex justify-center">
         <div className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
           <User className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 text-indigo-500" />
         </div>
       </div>
 
-      {/* Layout Section */}
       <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto px-4 sm:px-6 py-24">
-        {/* Sidebar */}
         <aside className="w-full lg:w-72 bg-white rounded-3xl shadow p-6 space-y-8">
           <div>
             <h2 className="text-xs uppercase tracking-wide text-gray-400 font-bold mb-4">
@@ -99,6 +114,7 @@ export default function Dashboard() {
                   key={index}
                   {...item}
                   activePath={location.pathname}
+                  onClick={(e) => handleNavClick(e, item)}
                 />
               ))}
             </div>
@@ -122,7 +138,6 @@ export default function Dashboard() {
           )}
         </aside>
 
-        {/* Main Outlet or Dashboard Summary */}
         <main className="flex-1 w-full">
           {location.pathname === "/dashboard" ? (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -154,11 +169,12 @@ export default function Dashboard() {
   );
 }
 
-function SidebarLink({ label, icon, path, activePath }) {
+function SidebarLink({ label, icon, path, activePath, onClick }) {
   const isActive = activePath === path;
   return (
     <Link
       to={path}
+      onClick={onClick}
       className={`flex items-center gap-3 px-4 py-3 rounded-xl transition duration-200 text-sm sm:text-base ${
         isActive
           ? "bg-indigo-600 text-white shadow"

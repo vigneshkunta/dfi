@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { ShoppingBag, User, Menu, X, Dumbbell } from "lucide-react";
 
 const Navbar = () => {
@@ -7,22 +8,34 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Memoized toggle function to prevent unnecessary re-renders
+  const currentUser = useSelector((state) => state.user.currentUser);
+
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen((prev) => !prev);
   }, []);
 
-  // Handle navigation - using React Router's navigate for instant navigation
   const handleNavigation = useCallback(
     (e, path) => {
       e.preventDefault();
       setIsMobileMenuOpen(false);
-      navigate(path); // Instant navigation without page reload
+      navigate(path);
     },
     [navigate]
   );
 
-  // NavLink component for better performance
+  const handleProfileClick = useCallback(
+    (e) => {
+      e.preventDefault();
+      setIsMobileMenuOpen(false);
+      if (currentUser) {
+        navigate("/dashboard");
+      } else {
+        navigate("/login");
+      }
+    },
+    [currentUser, navigate]
+  );
+
   const NavLink = ({ href, children, onClick, className = "" }) => {
     const isActive = location.pathname === href;
     return (
@@ -42,7 +55,6 @@ const Navbar = () => {
 
   return (
     <header className="flex justify-between items-center px-6 md:px-10 py-4 border-b border-gray-200 bg-white font-medium shadow-sm relative z-50">
-      {/* Left Section: Logo + Brand Text */}
       <div
         className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity duration-200"
         onClick={(e) => handleNavigation(e, "/")}
@@ -58,9 +70,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Hamburger Menu Icon (visible on small screens) */}
       <div className="md:hidden flex items-center space-x-4">
-        {/* Shopping Bag Icon (visible on small screens alongside hamburger) */}
         <div
           className="relative text-xl text-[#1A1A66] cursor-pointer"
           role="button"
@@ -97,7 +107,6 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Center Section: Desktop Nav Links (hidden on small screens) */}
       <nav
         className="hidden md:block"
         role="navigation"
@@ -152,9 +161,7 @@ const Navbar = () => {
         </ul>
       </nav>
 
-      {/* Right Section: Desktop Icons & Button (hidden on small screens) */}
       <div className="hidden md:flex items-center space-x-4">
-        {/* Shopping Bag Icon (desktop) */}
         <div
           className="relative text-xl text-[#1A1A66] cursor-pointer"
           role="button"
@@ -177,7 +184,6 @@ const Navbar = () => {
           </span>
         </div>
 
-        {/* Enroll Now Button (desktop) */}
         <button
           className="
             bg-[#4E6EF2] hover:bg-[#3A57D8]
@@ -193,10 +199,9 @@ const Navbar = () => {
           Enroll Now
         </button>
 
-        {/* User Profile Icon (desktop) */}
-        <NavLink
+        <a
           href="/profile"
-          onClick={(e) => handleNavigation(e, "/profile")}
+          onClick={handleProfileClick}
           className="
             w-10 h-10 
             bg-gray-100 hover:bg-gray-200 
@@ -209,13 +214,11 @@ const Navbar = () => {
           aria-label="User Profile"
         >
           <User className="w-5 h-5 text-gray-600" />
-        </NavLink>
+        </a>
       </div>
 
-      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <>
-          {/* Mobile Menu Overlay */}
           <div
             className="fixed inset-0 bg-white z-40 flex flex-col items-center py-8 md:hidden"
             id="mobile-menu"
@@ -223,7 +226,6 @@ const Navbar = () => {
             aria-modal="true"
             aria-labelledby="mobile-menu-title"
           >
-            {/* Close button for mobile menu */}
             <div className="w-full flex justify-end px-6">
               <button
                 onClick={toggleMobileMenu}
@@ -234,7 +236,6 @@ const Navbar = () => {
               </button>
             </div>
 
-            {/* Mobile navigation links */}
             <nav
               className="flex flex-col items-center space-y-6 mt-8 text-lg"
               role="navigation"
@@ -274,7 +275,6 @@ const Navbar = () => {
                 Contact
               </NavLink>
 
-              {/* Mobile-specific Enroll Now button */}
               <button
                 className="
                   bg-[#4E6EF2] hover:bg-[#5169F1]
@@ -290,10 +290,9 @@ const Navbar = () => {
                 Enroll Now
               </button>
 
-              {/* Mobile-specific User Icon */}
-              <NavLink
+              <a
                 href="/profile"
-                onClick={(e) => handleNavigation(e, "/profile")}
+                onClick={handleProfileClick}
                 className="
                   w-12 h-12 
                   bg-gray-100 hover:bg-gray-200 
@@ -307,7 +306,7 @@ const Navbar = () => {
                 aria-label="User Profile"
               >
                 <User className="w-6 h-6 text-gray-600" />
-              </NavLink>
+              </a>
             </nav>
           </div>
         </>
