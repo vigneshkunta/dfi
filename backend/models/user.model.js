@@ -35,6 +35,7 @@ const userSchema = new Schema(
     phone: {
       type: String,
       unique: true,
+      sparse: true,
       validate: {
         validator: (value) => /^[0-9]{10}$/.test(value),
         message: "Invalid phone number format",
@@ -190,9 +191,8 @@ userSchema.methods.generateAccessToken = function () {
       username: this.username,
       isAdmin: this.isAdmin,
     },
-    process.env.ACCESS_TOKEN_SECRET,
+    process.env.ACCESS_TOKEN_SECRET
   );
 };
 
-
-export const User = mongoose.model("User",userSchema);
+export const User = mongoose.model("User", userSchema);
