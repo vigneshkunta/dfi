@@ -47,11 +47,11 @@ const userSchema = new Schema(
     },
     profilePic: {
       type: String,
-      default: "",
+      default: "https://image.shutterstock.com/image-vector/avatar-gender-neutral-silhouette-vector-260nw-2470054311.jpg",
     },
     coverPic: {
       type: String,
-      default: "",
+      default: "http://brosmar.com/wp-content/plugins/uix-page-builder/uixpb_templates/images/UixPageBuilderTmpl/default-cover-2.jpg",
     },
     bio: {
       type: String,

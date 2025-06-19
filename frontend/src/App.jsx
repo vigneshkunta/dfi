@@ -3,8 +3,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
-import AdminRoute from "./components/AdminRoute";
 
+// Lazy loaded pages
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
 const Events = lazy(() => import("./pages/Events"));
@@ -33,6 +33,7 @@ export default function App() {
       <Navbar />
       <Suspense fallback={<div className="text-center p-5">Loading...</div>}>
         <Routes>
+
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -44,7 +45,7 @@ export default function App() {
           <Route path="/licenses" element={<PublicLicenses />} />
           <Route path="/blog" element={<PublicBlog />} />
 
-          {/* Private Dashboard Routes */}
+          {/* Private Routes - General User */}
           <Route
             path="/dashboard"
             element={
@@ -54,29 +55,83 @@ export default function App() {
             }
           >
             <Route index element={<Navigate to="profile" replace />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="enrolled" element={<EnrolledCourses />} />
-            <Route path="wishlist" element={<Wishlist />} />
-            <Route path="reviews" element={<Reviews />} />
-            <Route path="orders" element={<OrderHistory />} />
-
-            {/* Admin Routes Nested inside Dashboard */}
             <Route
-              path="admin"
+              path="profile"
               element={
-                <PrivateRoute adminOnly>
-                  <AdminRoute />
+                <PrivateRoute>
+                  <Profile />
                 </PrivateRoute>
               }
-            >
-              <Route path="licenses" element={<Licenses />} />
-              <Route path="events" element={<Event />} />
-              <Route path="courses" element={<Courses />} />
-              <Route path="blog" element={<Blog />} />
-            </Route>
+            />
+            <Route
+              path="enrolled"
+              element={
+                <PrivateRoute>
+                  <EnrolledCourses />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="wishlist"
+              element={
+                <PrivateRoute>
+                  <Wishlist />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="reviews"
+              element={
+                <PrivateRoute>
+                  <Reviews />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="orders"
+              element={
+                <PrivateRoute>
+                  <OrderHistory />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Admin-only Routes */}
+            <Route
+              path="admin/licenses"
+              element={
+                <PrivateRoute adminOnly={true}>
+                  <Licenses />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="admin/events"
+              element={
+                <PrivateRoute adminOnly={true}>
+                  <Event />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="admin/courses"
+              element={
+                <PrivateRoute adminOnly={true}>
+                  <Courses />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="admin/blog"
+              element={
+                <PrivateRoute adminOnly={true}>
+                  <Blog />
+                </PrivateRoute>
+              }
+            />
           </Route>
 
-          {/* Optional: catch-all or 404 redirect */}
+          {/* Catch-All */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>

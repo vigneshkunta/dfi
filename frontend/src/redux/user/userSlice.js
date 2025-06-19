@@ -39,7 +39,6 @@ export const logoutUser = createAsyncThunk(
       });
 
       if (!res.ok) {
-        const text = await res.text();
         throw new Error(`Logout failed: ${res.status}`);
       }
 
@@ -51,49 +50,37 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
+export const updateUserDetails = createAsyncThunk(
+  "user/updateUserDetails",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const res = await fetch("/api/user/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(userData),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        return rejectWithValue(data.message || "Update failed");
+      }
+
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Slice
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    signInStart: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    signInSuccess: (state, action) => {
-      state.currentUser = action.payload;
-      state.loading = false;
-      state.error = null;
-    },
-    signInFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    updateStart: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    updateSuccess: (state, action) => {
-      state.currentUser = action.payload;
-      state.loading = false;
-      state.error = null;
-    },
-    updateFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    deleteUserStart: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    deleteUserSuccess: (state) => {
-      state.currentUser = null;
-      state.loading = false;
-      state.error = null;
-    },
-    deleteUserFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
     logoutSuccess: (state) => {
       state.currentUser = null;
       state.error = null;
@@ -108,6 +95,7 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Login
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -120,23 +108,23 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      .addCase(updateUserDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUserDetails.fulfilled, (state, action) => {
+        state.currentUser = action.payload;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(updateUserDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const {
-  signInStart,
-  signInSuccess,
-  signInFailure,
-  updateStart,
-  updateSuccess,
-  updateFailure,
-  deleteUserStart,
-  deleteUserSuccess,
-  deleteUserFailure,
-  logoutSuccess,
-  updateUser,
-  clearUser,
-} = userSlice.actions;
-
+export const { logoutSuccess, updateUser, clearUser } = userSlice.actions;
 export default userSlice.reducer;

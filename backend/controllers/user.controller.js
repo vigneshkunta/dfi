@@ -41,7 +41,6 @@ export const registerUser = asyncHandler(async (req, res) => {
     await newUser.save();
     res.status(201).json(new ApiResponse(200, newUser, "Signup successful"));
   } catch (error) {
-    console.error("🔥 Error saving user:", error); // <--- This is essential
     throw new ApiError(500, "Internal server error");
   }
 });
@@ -87,4 +86,38 @@ export const logoutUser = asyncHandler(async (req, res) => {
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
     .json(new ApiResponse(200, {}, "user logged out successfully"));
+});
+
+export const updateUser = asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+
+  if (!userId) {
+    return res
+      .status(401)
+      .json(new ApiError(401, "Unauthorized: User ID not found"));
+  }
+
+  try {
+    const updates = req.body;
+
+    if (updates.phone === "") {
+      delete updates.phone;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updates, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedUser) {
+      return res.status(404).json(new ApiError(404, "User not found"));
+    }
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, updatedUser, "User updated successfully"));
+  } catch (error) {
+    console.error("Update failed:", error);
+    res.status(500).json(new ApiError(500, "Internal Server Error"));
+  }
 });
