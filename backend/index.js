@@ -44,11 +44,9 @@ app.use("/api/event", eventRoutes);
 app.use("/api/license", licenseRoutes);
 app.use("/api", uploadRoutes);
 
-// if (process.env.NODE_ENV === "production") {
-  const __dirname = path.resolve();
-  app.use(express.static(path.join(__dirname, "frontend", "dist")));
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "frontend", "dist")));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
-  });
-// }
+app.get("/{*any}", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+});
