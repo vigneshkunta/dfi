@@ -7,6 +7,8 @@ import mongoose from "mongoose";
 import userRoutes from './routes/user.routes.js';
 import courseRoutes from './routes/course.routes.js';
 import eventRoutes from './routes/event.routes.js';
+import licenseRoutes from './routes/license.routes.js';
+import uploadRoutes from './routes/upload.routes.js';
 
 dotenv.config();
 
@@ -39,6 +41,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/user", userRoutes);
 app.use("/api/course", courseRoutes);
 app.use("/api/event", eventRoutes);
+app.use("/api/license", licenseRoutes);
+app.use("/api", uploadRoutes);
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "frontend", "dist")));

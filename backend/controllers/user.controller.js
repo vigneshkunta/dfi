@@ -121,3 +121,8 @@ export const updateUser = asyncHandler(async (req, res) => {
     res.status(500).json(new ApiError(500, "Internal Server Error"));
   }
 });
+
+export const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find().select("-password"); 
+  res.json(new ApiResponse(200, users, "Fetched all users"));
+});
