@@ -146,14 +146,14 @@ const Contact = () => {
   return (
     <>
       <Helmet>
-        <title>Contact Us - Fitness Federation of India (FFI)</title>
+        <title>Contact Us - Djing Federation of India (DFI)</title>
         <meta
           name="description"
-          content="Reach out to Fitness Federation of India (FFI) for inquiries, partnerships, and support. Fill out our contact form or find our contact details."
+          content="Reach out to Djing Federation of India (DFI) for inquiries, partnerships, and support. Fill out our contact form or find our contact details."
         />
         <meta
           name="keywords"
-          content="contact FFI, Fitness Federation of India contact, FFI inquiries, fitness organization contact, send message, newsletter signup"
+          content="contact DFI, Djing Federation of India contact, DFI inquiries, Djing organization contact, send message, newsletter signup"
         />
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
@@ -161,11 +161,11 @@ const Contact = () => {
         {/* Replace with your actual URL */}
         <meta
           property="og:title"
-          content="Contact Us - Fitness Federation of India (FFI)"
+          content="Contact Us - Djing Federation of India (DFI)"
         />
         <meta
           property="og:description"
-          content="Reach out to Fitness Federation of India (FFI) for inquiries, partnerships, and support. Fill out our contact form or find our contact details."
+          content="Reach out to Djing Federation of India (DFI) for inquiries, partnerships, and support. Fill out our contact form or find our contact details."
         />
         <meta property="og:image" content={contactbg} />{" "}
         {/* Consider a dedicated OG image */}
@@ -175,11 +175,11 @@ const Contact = () => {
         {/* Replace with your actual URL */}
         <meta
           property="twitter:title"
-          content="Contact Us - Fitness Federation of India (FFI)"
+          content="Contact Us - Djing Federation of India (DFI)"
         />
         <meta
           property="twitter:description"
-          content="Reach out to Fitness Federation of India (FFI) for inquiries, partnerships, and support. Fill out our contact form or find our contact details."
+          content="Reach out to Djing Federation of India (DFI) for inquiries, partnerships, and support. Fill out our contact form or find our contact details."
         />
         <meta property="twitter:image" content={contactbg} />{" "}
         {/* Consider a dedicated Twitter image */}
@@ -396,10 +396,10 @@ const Contact = () => {
                 </h3>
                 <p className="text-sm text-gray-500">Email</p>
                 <a
-                  href="mailto:info@fitnessfederation.in"
+                  href="mailto:info@Djingfederation.in"
                   className="text-[#0D1B39] font-medium underline break-all mt-1 hover:text-[#4C63D2] transition-colors"
                 >
-                  info@fitnessfederation.in
+                  info@Djingfederation.in
                 </a>
               </div>
 
@@ -450,7 +450,7 @@ const Contact = () => {
                   Headquarters
                 </h3>
                 <p className="text-sm text-gray-500">
-                  Fitness Federation of India (FFI)
+                  Djing Federation of India (DFI)
                 </p>
                 <address className="text-[#0D1B39] font-medium underline mt-1 not-italic">
                   Nagpur, Maharashtra, India
@@ -472,7 +472,7 @@ const Contact = () => {
               Our Newsletter!
             </h2>
             <p className="text-lg text-gray-300 mb-10">
-              Want to stay informed about the latest fitness industry updates,
+              Want to stay informed about the latest Djing industry updates,
               events, and exclusive member benefits? Sign up for our newsletter!
             </p>
 

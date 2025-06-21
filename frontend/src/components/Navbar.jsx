@@ -65,7 +65,7 @@ const Navbar = () => {
       >
         <Dumbbell className="w-8 h-8 text-gray-800" aria-hidden="true" />
         <div className="text-sm leading-tight text-gray-800">
-          <span className="block">Fitness Federation</span>
+          <span className="block">Djing Federation</span>
           <span className="block">of India</span>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ArrowRight } from "lucide-react"; 
-import { GraduationCap, TrendingUp, Users } from "lucide-react";// Import the ArrowRight icon
+import { ArrowRight } from "lucide-react";
+import { GraduationCap, TrendingUp, Users } from "lucide-react"; // Import the ArrowRight icon
 
 // DJ Hero Images (carousel)
 // Each object now includes the image source and the button text for that slide
@@ -74,7 +74,7 @@ const upcomingEvents = [
     image:
       "https://images.pexels.com/photos/3862635/pexels-photo-3862635.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     type: "LICENSEE HOLDER ANNUAL MEETING",
-    ffii: false, // Changed to false for DJ events
+    DFIi: false, // Changed to false for DJ events
     location: "Hyderabad, Telangana",
     title: "DFI Licensees Annual Meeting",
     description:
@@ -86,7 +86,7 @@ const upcomingEvents = [
     image:
       "https://images.pexels.com/photos/3863073/pexels-photo-3863073.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     type: "DJ ANNUAL CONFERENCE",
-    ffii: false, // Changed to false for DJ events
+    DFIi: false, // Changed to false for DJ events
     location: "Hyderabad, Telangana",
     title: "DFI Annual DJ Conference",
     description:
@@ -98,7 +98,7 @@ const upcomingEvents = [
     image:
       "https://images.pexels.com/photos/1566412/pexels-photo-1566412.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     type: "DJ CLUB OWNERS MEETUP HYDERABAD",
-    ffii: false, // Changed to false for DJ events
+    DFIi: false, // Changed to false for DJ events
     location: "Hyderabad, Telangana",
     title: "DFI Annual Club Owners Meetup",
     description:
@@ -112,7 +112,6 @@ const upcomingEvents = [
  * Manages and displays a sliding carousel of "Why Choose DFI" cards.
  * Shows 4 cards at a time, allowing navigation through 5 total cards.
  */
-
 
 const WhyChooseDFISlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -133,13 +132,13 @@ const WhyChooseDFISlider = () => {
         <div className="flex flex-col md:flex-row items-center justify-between mb-10">
           <div className="md:w-3/4">
             <h2 className="text-4xl font-bold text-gray-800 mb-2">
-              Why Choose <span className="text-orange-500">FFI?</span>
+              Why Choose <span className="text-orange-500">DFI?</span>
             </h2>
             <p className="text-gray-600">
-              The Fitness Federation of India (FFI) is your gateway to a
-              stronger career or business in the fitness industry. By joining
-              FFI, you gain access to a network of opportunities, resources, and
-              support that will help you thrive!
+              The Djing Federation of India (DFI) is your gateway to a stronger
+              career or business in the Djing industry. By joining DFI, you gain
+              access to a network of opportunities, resources, and support that
+              will help you thrive!
             </p>
           </div>
           <div className="flex space-x-2 mt-4 md:mt-0">
@@ -364,13 +363,6 @@ const Home = () => {
               alt="DFI Mission"
               className="w-[360px] h-[500px] object-cover rounded-xl shadow-2xl z-10"
             />
-
-            {/* Trainer Image */}
-            <img
-              // src={trainerImg}
-              alt="DFI Trainer"
-              className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[260px] sm:w-[300px] object-contain drop-shadow-2xl"
-            />
           </div>
 
           {/* Right - Text Content */}
@@ -543,7 +535,7 @@ const Home = () => {
       {/* Why Choose DFI Section - Uses the new slider component */}
       <WhyChooseDFISlider />
 
-      {/* New Section for Fitness Trainer Certification - REDUCED SIZE */}
+      {/* New Section for Djing Trainer Certification - REDUCED SIZE */}
       <section className="bg-[#312E81] py-10 px-4 sm:px-10 lg:px-20">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10">
           {/* Left: Logo + Text */}
@@ -631,14 +623,14 @@ const Home = () => {
                   <div className="absolute top-4 left-4 bg-white bg-opacity-90 text-[#E86E2C] px-3 py-1 rounded-md font-semibold text-sm uppercase">
                     {event.type}
                   </div>
-                  {event.ffii && (
+                  {event.DFIi && (
                     <div className="absolute bottom-3 right-3 w-12 h-12 bg-white rounded-md flex items-center justify-center text-lg font-bold leading-none shadow-sm">
                       <span className="text-orange-500 text-base">ff</span>
                       <span className="text-[#2E2D6F] text-base">i</span>
                       <span className="text-green-600 text-base">i</span>
                     </div>
                   )}
-                  {!event.ffii && ( // Render DFI logo if not ffii event
+                  {!event.DFIi && ( // Render DFI logo if not DFIi event
                     <div className="absolute bottom-3 right-3">
                       <DFILogo size="48" className="w-12 h-12" />
                     </div>

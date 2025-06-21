@@ -1,6 +1,7 @@
-import React, { lazy, Suspense, useEffect } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import AOS from "aos";
+import axios from "axios";
 import "aos/dist/aos.css";
 
 import eventBgWebp from "../assets/DJING/event-bg.webp";
@@ -9,43 +10,39 @@ import { FaUsers, FaGraduationCap, FaChartLine } from "react-icons/fa";
 
 const EventsCard = lazy(() => import("../components/EventsCard"));
 
-const eventsList = [
-  {
-    image: "",
-    location: "Mumbai, Maharashtra",
-    title: "DJ Licensing Bootcamp",
-    description:
-      "Get officially certified as a DJ in just one electric day. Includes workshops, mentor sessions, and government-recognized licenses.",
-    date: "July 15, 2025",
-    button: "GET LICENSED",
-  },
-  {
-    image: "",
-    location: "Goa Beach, India",
-    title: "Sunset Bass Festival 2025",
-    description:
-      "A three-day DJ festival with India's top EDM artists. Non-stop music, beach vibes, and high-energy performances!",
-    date: "August 23–25, 2025",
-    button: "BOOK NOW",
-  },
-  {
-    image: "",
-    location: "Delhi NCR",
-    title: "Underground Beats Night",
-    description:
-      "An exclusive underground DJ party for pro members. Networking, new talent showcase, and epic sound drops.",
-    date: "September 14, 2025",
-    button: "INVITE ONLY",
-  },
-];
-
 const Events = () => {
+  const [eventsList, setEventsList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      once: true,
-      offset: 100,
-    });
+    AOS.init({ duration: 1000, once: true, offset: 100 });
+
+    const fetchEvents = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/api/event/");
+        const data = res.data.data || res.data.message || [];
+
+        const formattedEvents = data.map((event) => ({
+          id: event._id,
+          image: event.image,
+          location: event.location?.name || "India",
+          title: event.name,
+          description: event.description,
+          date: `${new Date(event.startDate).toLocaleDateString()} → ${new Date(
+            event.endDate
+          ).toLocaleDateString()}`,
+          button: event.state || "VIEW DETAILS",
+        }));
+
+        setEventsList(formattedEvents);
+      } catch (err) {
+        console.error("Failed to fetch events:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
   }, []);
 
   return (
@@ -60,17 +57,13 @@ const Events = () => {
 
       <main className="text-gray-800" role="main">
         {/* Hero Banner */}
-        <section
-          className="relative w-full h-[400px] sm:h-[500px] md:h-[550px] bg-black"
-          aria-label="DJ Federation Banner"
-        >
+        <section className="relative w-full h-[400px] sm:h-[500px] md:h-[550px] bg-black">
           <img
             src={eventBgWebp}
             alt="Crowd enjoying DJ event"
             className="absolute inset-0 w-full h-full object-cover"
             loading="eager"
             decoding="async"
-            fetchpriority="high"
           />
           <div className="absolute inset-0 bg-black/50 z-0" />
           <div className="relative z-10 flex items-center h-full px-4 sm:px-6 md:px-20">
@@ -80,7 +73,7 @@ const Events = () => {
               </h1>
               <div className="h-2 w-32 sm:w-40 bg-pink-500 mt-3" />
               <p className="mt-4 text-white text-base sm:text-lg max-w-lg">
-                Official DJ licenses, underground parties, and electrifying
+                ODFIcial DJ licenses, underground parties, and electrifying
                 festivals — all in one federation.
               </p>
             </div>
@@ -104,22 +97,30 @@ const Events = () => {
               <div className="text-center text-gray-500">Loading events...</div>
             }
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-              {eventsList.map((event, index) => (
-                <div
-                  key={index}
-                  data-aos="zoom-in"
-                  className="transform transition-transform duration-300 hover:scale-105"
-                >
-                  <EventsCard {...event} />
-                </div>
-              ))}
-            </div>
+            {loading ? (
+              <div className="text-center text-gray-500">
+                Fetching latest events...
+              </div>
+            ) : eventsList.length === 0 ? (
+              <div className="text-center text-red-500">No events found.</div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                {eventsList.map((event, index) => (
+                  <div
+                    key={event.id || index}
+                    data-aos="zoom-in"
+                    className="transform transition-transform duration-300 hover:scale-105"
+                  >
+                    <EventsCard {...event} />
+                  </div>
+                ))}
+              </div>
+            )}
           </Suspense>
         </section>
 
         {/* Promotional Section */}
-        <section className="px-4 sm:px-6 md:px-20 py-20 bg-[#F6F4EE] font-['Inter'] ">
+        <section className="px-4 sm:px-6 md:px-20 py-20 bg-[#F6F4EE] font-['Inter']">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div
               className="relative flex justify-center md:justify-start"
@@ -128,8 +129,8 @@ const Events = () => {
               <div className="hidden sm:block bg-[#2D2A7B] w-[300px] sm:w-[350px] md:w-[400px] h-[350px] sm:h-[400px] md:h-[450px] rounded-2xl absolute top-0 left-0 z-0" />
               <img
                 src={djgroup}
-                alt="Group of Fitness Federation team members"
-                className="relative z-10 rounded-xl object-cover w-full max-w-[320px] sm:max-w-[400px] md:max-w-[500px] h-auto shadow-lg translate-y-10 sm:translate-y-12 md:translate-y-16"
+                alt="Group of Djing Federation team members"
+                className="relative z-10 rounded-xl object-cover w-full max-w-[500px] shadow-lg translate-y-16"
                 loading="lazy"
               />
             </div>
@@ -138,15 +139,13 @@ const Events = () => {
               <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-snug">
                 Join Us for the Most Anticipated <br />
                 <span className="text-[#2A2B76]">
-                  Fitness Industry Events of the Year!
+                  Djing Industry Events of the Year!
                 </span>
               </h2>
               <p className="mt-6 text-base sm:text-lg text-gray-700 leading-relaxed">
-                The Fitness Federation of India (FFI) is proud to host three
-                exclusive events designed to bring together trainers, gym
-                owners, and licensees for networking, learning, and business
-                growth. Held in Goa, these events feature industry leaders,
-                expert speakers, and groundbreaking discussions.
+                The Djing Federation of India (DFI) is proud to host exclusive
+                events designed to bring together DJs, event organizers, and
+                music lovers across the country.
               </p>
               <div className="inline-block mt-6 bg-[#2A2B76] text-white px-5 py-3 rounded-full text-sm font-semibold tracking-wide shadow-md animate-bounce">
                 20th – 21st December 2025 @Goa, India
