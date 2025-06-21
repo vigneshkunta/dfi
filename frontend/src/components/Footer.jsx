@@ -11,18 +11,18 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center mb-4">
               <div className="bg-orange-500 rounded-lg p-2 mr-3 flex items-center justify-center min-w-[40px] h-10">
-                <span className="text-white font-bold text-lg">ffi</span>
+                <span className="text-white font-bold text-lg">Dfi</span>
               </div>
               <div>
-                <h3 className="text-2xl font-bold">Fitness Federation</h3>
+                <h3 className="text-2xl font-bold">Djing Federation</h3>
                 <p className="text-lg text-gray-200">of India</p>
               </div>
             </div>
             <p className="text-gray-100 leading-relaxed max-w-md">
-              The Fitness Federation of India (FFI) was established with a
-              mission to revolutionize the fitness industry by providing
-              support, recognition, and professional development to trainers,
-              gym owners, educators, and businesses.
+              The Djing Federation of India (DFI) was established with a mission
+              to revolutionize the Djing industry by providing support,
+              recognition, and professional development to trainers, gym owners,
+              educators, and businesses.
             </p>
           </div>
 
@@ -98,7 +98,7 @@ const Footer = () => {
               <div className="flex items-center">
                 <Mail className="w-5 h-5 mr-3 text-orange-500 flex-shrink-0" />
                 <a
-                  href="mailto:info@fitnessfederation.in"
+                  href="mailto:info@Djingfederation.in"
                   className="text-gray-100 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-transparent rounded px-1 py-1 break-all"
                 >
                   info@Djingfederation.in
@@ -111,7 +111,7 @@ const Footer = () => {
               <h5 className="text-lg font-medium mb-3">Follow Us</h5>
               <div className="flex space-x-4">
                 <a
-                  href="https://instagram.com/fitnessfederationindia"
+                  href="https://instagram.com/Djingfederationindia"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-white bg-opacity-10 hover:bg-opacity-20 p-2 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-transparent"
@@ -119,7 +119,7 @@ const Footer = () => {
                   <Instagram className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://linkedin.com/company/fitness-federation-india"
+                  href="https://linkedin.com/company/Djing-federation-india"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-white bg-opacity-10 hover:bg-opacity-20 p-2 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-transparent"
@@ -127,7 +127,7 @@ const Footer = () => {
                   <Linkedin className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://youtube.com/@fitnessfederationindia"
+                  href="https://youtube.com/@Djingfederationindia"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-white bg-opacity-10 hover:bg-opacity-20 p-2 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-transparent"

@@ -1,9 +1,17 @@
 import React from "react";
-import licensebg from '../assets/DJING/licensebg.webp'
+import licensebg from "../assets/DJING/licensebg.webp";
 import Unlockimg from "../assets/DJING/Unlockimg.webp";
 import whocanbecomemem from "../assets/DJING/whocanbecomemem.webp";
 import { Helmet } from "react-helmet-async";
-import { FileText, Lock, Users, Briefcase, Globe, User, Unlock } from "lucide-react";
+import {
+  FileText,
+  Lock,
+  Users,
+  Briefcase,
+  Globe,
+  User,
+  Unlock,
+} from "lucide-react";
 
 const plans = [
   {
@@ -28,7 +36,7 @@ const benefits = [
     icon: FileText,
     title: "Govt-Recognized DJ License",
     description:
-      "Get officially certified to perform at clubs, weddings, and events with verified credentials.",
+      "Get oDFIcially certified to perform at clubs, weddings, and events with verified credentials.",
   },
   {
     icon: Lock,
@@ -66,7 +74,7 @@ const PublicLicenses = () => {
   return (
     <>
       <Helmet>
-        <title>Official DJ License - DJ Federation of India</title>
+        <title>ODFIcial DJ License - DJ Federation of India</title>
         <meta
           name="description"
           content="Get your government-recognized DJ license, access legal support, premium gigs, and join India's elite DJ network with DJFI."
@@ -96,7 +104,7 @@ const PublicLicenses = () => {
         <div className="relative z-10 flex items-center justify-start h-full px-4 sm:px-6 md:px-20">
           <div data-aos="fade-right" className="max-w-2xl">
             <h1 className="text-white text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-wide drop-shadow-lg">
-              Official DJ License
+              ODFIcial DJ License
             </h1>
             <div className="h-2 w-32 sm:w-40 bg-pink-500 mt-3 rounded-full" />
             <p className="mt-6 text-white text-base sm:text-lg leading-relaxed drop-shadow-md">

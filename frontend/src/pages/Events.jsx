@@ -15,7 +15,7 @@ const eventsList = [
     location: "Mumbai, Maharashtra",
     title: "DJ Licensing Bootcamp",
     description:
-      "Get officially certified as a DJ in just one electric day. Includes workshops, mentor sessions, and government-recognized licenses.",
+      "Get oDFIcially certified as a DJ in just one electric day. Includes workshops, mentor sessions, and government-recognized licenses.",
     date: "July 15, 2025",
     button: "GET LICENSED",
   },
@@ -80,7 +80,7 @@ const Events = () => {
               </h1>
               <div className="h-2 w-32 sm:w-40 bg-pink-500 mt-3" />
               <p className="mt-4 text-white text-base sm:text-lg max-w-lg">
-                Official DJ licenses, underground parties, and electrifying
+                ODFIcial DJ licenses, underground parties, and electrifying
                 festivals — all in one federation.
               </p>
             </div>
@@ -128,7 +128,7 @@ const Events = () => {
               <div className="hidden sm:block bg-[#2D2A7B] w-[300px] sm:w-[350px] md:w-[400px] h-[350px] sm:h-[400px] md:h-[450px] rounded-2xl absolute top-0 left-0 z-0" />
               <img
                 src={djgroup}
-                alt="Group of Fitness Federation team members"
+                alt="Group of Djing Federation team members"
                 className="relative z-10 rounded-xl object-cover w-full max-w-[320px] sm:max-w-[400px] md:max-w-[500px] h-auto shadow-lg translate-y-10 sm:translate-y-12 md:translate-y-16"
                 loading="lazy"
               />
@@ -138,11 +138,11 @@ const Events = () => {
               <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-snug">
                 Join Us for the Most Anticipated <br />
                 <span className="text-[#2A2B76]">
-                  Fitness Industry Events of the Year!
+                  Djing Industry Events of the Year!
                 </span>
               </h2>
               <p className="mt-6 text-base sm:text-lg text-gray-700 leading-relaxed">
-                The Fitness Federation of India (FFI) is proud to host three
+                The Djing Federation of India (DFI) is proud to host three
                 exclusive events designed to bring together trainers, gym
                 owners, and licensees for networking, learning, and business
                 growth. Held in Goa, these events feature industry leaders,
