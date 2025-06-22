@@ -19,7 +19,7 @@ const Events = () => {
 
     const fetchEvents = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/event/");
+        const res = await axios.get("/api/event/");
         const data = res.data.data || res.data.message || [];
 
         const formattedEvents = data.map((event) => ({
