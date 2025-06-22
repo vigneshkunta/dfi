@@ -1,7 +1,9 @@
 import React from "react";
 import { FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-const EventsCard = ({ image, location, title, description, date, button }) => {
+const EventsCard = ({ image, location, title, description, date, button, id }) => {
+  const navigate = useNavigate();
   return (
     <article className="bg-white shadow-md p-5 rounded-xl transition hover:shadow-lg flex flex-col justify-between h-full">
       {/* Image or Placeholder */}
@@ -38,6 +40,9 @@ const EventsCard = ({ image, location, title, description, date, button }) => {
         </p>
         {button && (
           <button
+            onClick={() => {
+              navigate(`/event/${id}`);
+            }}
             className="bg-orange-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 transition focus:outline-none"
             aria-label={`Action for ${title}`}
           >

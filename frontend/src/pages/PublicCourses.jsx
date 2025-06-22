@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import coursesBgWebp from "../assets/DJING/coursesBgWebp.webp";
+import { useNavigate } from "react-router-dom";
 
 const PublicCourses = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -145,7 +148,12 @@ const PublicCourses = () => {
                   </span>
                 </div>
 
-                <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                <button
+                  onClick={() => {
+                    navigate(`/course/${course._id || course.id}`);
+                  }}
+                  className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
+                >
                   Preview This Course
                 </button>
               </div>

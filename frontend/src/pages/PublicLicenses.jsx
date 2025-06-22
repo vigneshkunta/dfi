@@ -5,6 +5,7 @@ import Unlockimg from "../assets/DJING/Unlockimg.webp";
 import whocanbecomemem from "../assets/DJING/whocanbecomemem.webp";
 import { Helmet } from "react-helmet-async";
 import { FileText, Lock, Users, Briefcase, Globe, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const benefits = [
   {
@@ -48,6 +49,8 @@ const benefits = [
 const PublicLicenses = () => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLicenses = async () => {
@@ -153,7 +156,12 @@ const PublicLicenses = () => {
                       <span className="ml-1 text-base">/{plan.duration}</span>
                     </div>
                   </div>
-                  <button className="mt-auto bg-[#F36A1D] text-white text-lg font-semibold py-5 w-full rounded-b-2xl hover:bg-[#d75710] transition-all">
+                  <button
+                    className="mt-auto bg-[#F36A1D] text-white text-lg font-semibold py-5 w-full rounded-b-2xl hover:bg-[#d75710] transition-all"
+                    onClick={() => {
+                      navigate(`/license/${plan.id}`);
+                    }}
+                  >
                     JOIN PLAN
                   </button>
                 </div>

@@ -27,6 +27,10 @@ const Courses = lazy(() => import("./pages/admin/Courses"));
 const Event = lazy(() => import("./pages/admin/Events"));
 const Blog = lazy(() => import("./pages/admin/Blog"));
 
+const LicensePage = lazy(() => import("./pages/LicensePage"));
+const CoursePage = lazy(() => import("./pages/CoursePage"));
+const EventPage = lazy(() => import("./pages/EventPage"));
+
 export default function App() {
   return (
     <>
@@ -44,6 +48,10 @@ export default function App() {
           <Route path="/courses" element={<PublicCourses />} />
           <Route path="/licenses" element={<PublicLicenses />} />
           <Route path="/blog" element={<PublicBlog />} />
+          <Route path="/license/:id" element={<LicensePage />} />
+          <Route path="/course/:id" element={<CoursePage />} />
+          <Route path="/event/:id" element={<EventPage />} />
+          
 
           {/* Private Routes - General User */}
           <Route

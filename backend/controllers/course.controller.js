@@ -20,12 +20,12 @@ export const createCourse = asyncHandler(async (req, res) => {
 });
 
 export const updateCourse = asyncHandler(async (req, res) => {
-  const Course = await Course.findById(req.params.id);
-  if (!Course)
+  const course = await Course.findById(req.params.id);
+  if (!course)
     return res.status(404).json(new ApiError(404, "Course not found"));
 
   if (
-    Course.user.toString() !== req.user._id.toString() &&
+    course.user.toString() !== req.user._id.toString() &&
     !req.user.isSuperAdmin
   ) {
     return res.status(403).json(new ApiError(403, "Unauthorized"));
@@ -42,12 +42,12 @@ export const updateCourse = asyncHandler(async (req, res) => {
 });
 
 export const deleteCourse = asyncHandler(async (req, res) => {
-  const Course = await Course.findById(req.params.id);
-  if (!Course)
+  const course = await Course.findById(req.params.id);
+  if (!course)
     return res.status(404).json(new ApiResponse(404, "Course not found"));
 
   if (
-    Course.user.toString() !== req.user._id.toString() &&
+    course.user.toString() !== req.user._id.toString() &&
     !req.user.isSuperAdmin
   ) {
     return res.status(403).json(new ApiError(403, "Unauthorized"));
@@ -63,9 +63,9 @@ export const getCourses = asyncHandler(async (req, res) => {
 });
 
 export const getCourseById = asyncHandler(async (req, res) => {
-  const Course = await Course.findById(req.params.id);
-  if (!Course)
+  const course = await Course.findById(req.params.id);
+  if (!course)
     return res.status(404).json(new ApiResponse(404, "Course not found"));
 
-  res.status(200).json(new ApiResponse(200, Course));
+  res.status(200).json(new ApiResponse(200, course));
 });
