@@ -5,7 +5,7 @@ import Unlockimg from "../assets/DJING/Unlockimg.webp";
 import whocanbecomemem from "../assets/DJING/whocanbecomemem.webp";
 import { Helmet } from "react-helmet-async";
 import { FileText, Lock, Users, Briefcase, Globe, User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const benefits = [
   {
@@ -140,31 +140,33 @@ const PublicLicenses = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               {plans.map((plan) => (
-                <div
-                  key={plan.id}
-                  className="rounded-2xl overflow-hidden border border-[#ececec] shadow-lg bg-white flex flex-col transform hover:scale-105 transition-transform duration-300"
-                >
-                  <div className="bg-[#EEF7DB] p-10 flex flex-col items-center rounded-t-2xl">
-                    <h4 className="text-2xl font-medium text-[#0D1B39] mb-5">
-                      {plan.title}
-                    </h4>
-                    <div className="flex items-baseline">
-                      <span className="text-3xl mr-1">₹</span>
-                      <span className="text-5xl font-bold">
-                        {plan.price.replace("₹ ", "")}
-                      </span>
-                      <span className="ml-1 text-base">/{plan.duration}</span>
-                    </div>
-                  </div>
-                  <button
-                    className="mt-auto bg-[#F36A1D] text-white text-lg font-semibold py-5 w-full rounded-b-2xl hover:bg-[#d75710] transition-all"
-                    onClick={() => {
-                      navigate(`/license/${plan.id}`);
-                    }}
+                <Link to={`/license/${plan.id}`}>
+                  <div
+                    key={plan.id}
+                    className="rounded-2xl overflow-hidden border border-[#ececec] shadow-lg bg-white flex flex-col transform hover:scale-105 transition-transform duration-300"
                   >
-                    JOIN PLAN
-                  </button>
-                </div>
+                    <div className="bg-[#EEF7DB] p-10 flex flex-col items-center rounded-t-2xl">
+                      <h4 className="text-2xl font-medium text-[#0D1B39] mb-5">
+                        {plan.title}
+                      </h4>
+                      <div className="flex items-baseline">
+                        <span className="text-3xl mr-1">₹</span>
+                        <span className="text-5xl font-bold">
+                          {plan.price.replace("₹ ", "")}
+                        </span>
+                        <span className="ml-1 text-base">/{plan.duration}</span>
+                      </div>
+                    </div>
+                    <button
+                      className="mt-auto bg-[#F36A1D] text-white text-lg font-semibold py-5 w-full rounded-b-2xl hover:bg-[#d75710] transition-all"
+                      onClick={() => {
+                        navigate(`/license/${plan.id}`);
+                      }}
+                    >
+                      JOIN PLAN
+                    </button>
+                  </div>
+                </Link>
               ))}
             </div>
           )}

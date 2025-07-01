@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import coursesBgWebp from "../assets/DJING/coursesBgWebp.webp";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const PublicCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -89,75 +89,79 @@ const PublicCourses = () => {
           <p className="col-span-full text-center text-red-500">{error}</p>
         ) : Array.isArray(courses) && courses.length > 0 ? (
           courses.map((course) => (
-            <article
-              key={course._id || course.id}
-              className="group bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col p-3 transform transition-transform duration-300 ease-out hover:-translate-y-2 hover:shadow-lg"
-              role="group"
-              aria-label={course.title}
-            >
-              <div className="flex justify-between items-center px-0 pt-0 pb-2">
-                <div className="flex items-center space-x-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-indigo-600"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-700 text-sm font-medium">
-                    {course.logo_text || "DJing Federation of India"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="relative w-full h-44 sm:h-52 md:h-56 overflow-hidden rounded-md">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
-                />
-              </div>
-
-              <div className="p-3 flex flex-col justify-between space-y-3 min-h-[220px]">
-                <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-1 self-start">
-                  {course.category || "General"}
-                </span>
-
-                <h2 className="text-lg font-bold text-gray-900 mb-1 leading-tight flex-grow">
-                  {course.title}
-                </h2>
-
-                <p className="text-sm text-gray-600 line-clamp-3">
-                  {course.description}
-                </p>
-
-                <div className="flex justify-between items-center mt-auto pt-2 border-t border-gray-100">
-                  <div className="flex items-center">
-                    <span className="text-yellow-500 text-lg mr-1">★★★★★</span>
-                    <span className="text-gray-500 text-sm">
-                      {course.rating || "0/0"}
+            <Link to={`/course/${course._id || course.id}`} key={course._id || course.id} className="no-underline">
+              <article
+                key={course._id || course.id}
+                className="group bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col p-3 transform transition-transform duration-300 ease-out hover:-translate-y-2 hover:shadow-lg"
+                role="group"
+                aria-label={course.title}
+              >
+                <div className="flex justify-between items-center px-0 pt-0 pb-2">
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-indigo-600"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700 text-sm font-medium">
+                      {course.logo_text || "DJing Federation of India"}
                     </span>
                   </div>
-                  <span className="text-indigo-600 text-lg font-bold">
-                    {course.price}
-                  </span>
                 </div>
 
-                <button
-                  onClick={() => {
-                    navigate(`/course/${course._id || course.id}`);
-                  }}
-                  className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
-                >
-                  Preview This Course
-                </button>
-              </div>
-            </article>
+                <div className="relative w-full h-44 sm:h-52 md:h-56 overflow-hidden rounded-md">
+                  <img
+                    src={course.image}
+                    alt={course.title}
+                    className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
+                  />
+                </div>
+
+                <div className="p-3 flex flex-col justify-between space-y-3 min-h-[220px]">
+                  <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-1 self-start">
+                    {course.category || "General"}
+                  </span>
+
+                  <h2 className="text-lg font-bold text-gray-900 mb-1 leading-tight flex-grow">
+                    {course.title}
+                  </h2>
+
+                  <p className="text-sm text-gray-600 line-clamp-3">
+                    {course.description}
+                  </p>
+
+                  <div className="flex justify-between items-center mt-auto pt-2 border-t border-gray-100">
+                    <div className="flex items-center">
+                      <span className="text-yellow-500 text-lg mr-1">
+                        ★★★★★
+                      </span>
+                      <span className="text-gray-500 text-sm">
+                        {course.rating || "0/0"}
+                      </span>
+                    </div>
+                    <span className="text-indigo-600 text-lg font-bold">
+                      {course.price}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      navigate(`/course/${course._id || course.id}`);
+                    }}
+                    className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
+                  >
+                    Preview This Course
+                  </button>
+                </div>
+              </article>
+            </Link>
           ))
         ) : (
           <p className="col-span-full text-center text-gray-600">
