@@ -6,6 +6,9 @@ import whocanbecomemem from "../assets/DJING/whocanbecomemem.webp";
 import { Helmet } from "react-helmet-async";
 import { FileText, Lock, Users, Briefcase, Globe, User } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchLicenses } from "../redux/licenses/licensesSlice";
+import { set } from "mongoose";
 
 const benefits = [
   {
@@ -48,35 +51,15 @@ const benefits = [
 
 const PublicLicenses = () => {
   const [plans, setPlans] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { licenses, loading, error } = useSelector((state) => state.licenses);
 
   useEffect(() => {
-    const fetchLicenses = async () => {
-      try {
-        const res = await axios.get("/api/license/");
-        const rawPlans = res.data.data || res.data.message || [];
-
-        const formatted = rawPlans.map((item) => ({
-          id: item._id,
-          title: item.license_name,
-          price: `₹ ${item.price}`,
-          description: item.description,
-          duration: item.duration,
-        }));
-
-        setPlans(formatted);
-      } catch (error) {
-        console.error("Error fetching licenses:", error);
-        setPlans([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLicenses();
-  }, []);
+    dispatch(fetchLicenses());
+    setPlans(licenses.data || []);
+  }, [dispatch]);
 
   return (
     <>
@@ -140,9 +123,9 @@ const PublicLicenses = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               {plans.map((plan) => (
-                <Link to={`/license/${plan.id}`}>
+                <Link to={`/license/${plan._id}`} key={plan._id} className="no-underline">
                   <div
-                    key={plan.id}
+                    key={plan._id}
                     className="rounded-2xl overflow-hidden border border-[#ececec] shadow-lg bg-white flex flex-col transform hover:scale-105 transition-transform duration-300"
                   >
                     <div className="bg-[#EEF7DB] p-10 flex flex-col items-center rounded-t-2xl">
@@ -152,7 +135,7 @@ const PublicLicenses = () => {
                       <div className="flex items-baseline">
                         <span className="text-3xl mr-1">₹</span>
                         <span className="text-5xl font-bold">
-                          {plan.price.replace("₹ ", "")}
+                          {String(plan.price).replace("₹ ", "")}
                         </span>
                         <span className="ml-1 text-base">/{plan.duration}</span>
                       </div>

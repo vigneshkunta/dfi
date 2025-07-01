@@ -3,47 +3,27 @@ import { Helmet } from "react-helmet-async";
 import AOS from "aos";
 import axios from "axios";
 import "aos/dist/aos.css";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEvents } from "../redux/events/eventsSlice";
 
 import eventBgWebp from "../assets/DJING/event-bg.webp";
 import djgroup from "../assets/DJING/dj-group.webp";
 import { FaUsers, FaGraduationCap, FaChartLine } from "react-icons/fa";
+import { set } from "mongoose";
 
 const EventsCard = lazy(() => import("../components/EventsCard"));
 
 const Events = () => {
   const [eventsList, setEventsList] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
+  const { events, loading, error } = useSelector((state) => state.events);
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true, offset: 100 });
-
-    const fetchEvents = async () => {
-      try {
-        const res = await axios.get("/api/event/");
-        const data = res.data.data || res.data.message || [];
-
-        const formattedEvents = data.map((event) => ({
-          id: event._id,
-          image: event.image,
-          location: event.location?.name || "India",
-          title: event.name,
-          description: event.description,
-          date: `${new Date(event.startDate).toLocaleDateString()} → ${new Date(
-            event.endDate
-          ).toLocaleDateString()}`,
-          button: event.state || "VIEW DETAILS",
-        }));
-
-        setEventsList(formattedEvents);
-      } catch (err) {
-        console.error("Failed to fetch events:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEvents();
-  }, []);
+    dispatch(fetchEvents()); 
+    setEventsList(events.data); 
+  }, [dispatch]);
 
   return (
     <>
@@ -107,7 +87,7 @@ const Events = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
                 {eventsList.map((event, index) => (
                   <div
-                    key={event.id || index}
+                    key={event._id || index}
                     data-aos="zoom-in"
                     className="transform transition-transform duration-300 hover:scale-105"
                   >

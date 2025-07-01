@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
-import { GraduationCap, TrendingUp, Users } from "lucide-react"; // Import the ArrowRight icon
+import { GraduationCap, TrendingUp, Users } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchEvents } from "../redux/events/eventsSlice";
+import { Link } from "react-router-dom";
 
-// DJ Hero Images (carousel)
-// Each object now includes the image source and the button text for that slide
 const cards = [
   {
     title: "Certificate",
@@ -38,7 +39,6 @@ const djImages = [
   },
 ];
 
-// Data for the "Why Choose DFI" cards (now 5 cards as requested)
 const whyChooseDFICards = [
   {
     title: "Exclusive Opportunities",
@@ -66,52 +66,6 @@ const whyChooseDFICards = [
     img: "https://images.pexels.com/photos/1389429/pexels-photo-1389429.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
 ];
-
-// Data for the "Upcoming Events" cards
-const upcomingEvents = [
-  {
-    id: 1,
-    image:
-      "https://images.pexels.com/photos/3862635/pexels-photo-3862635.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    type: "LICENSEE HOLDER ANNUAL MEETING",
-    DFIi: false, // Changed to false for DJ events
-    location: "Hyderabad, Telangana",
-    title: "DFI Licensees Annual Meeting",
-    description:
-      "Building Stronger Partnerships for Growth. This meeting is designed for DFI licensees to discuss the latest developments, strategic initiatives, and industry trends.",
-    date: "December 20, 2025",
-  },
-  {
-    id: 2,
-    image:
-      "https://images.pexels.com/photos/3863073/pexels-photo-3863073.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    type: "DJ ANNUAL CONFERENCE",
-    DFIi: false, // Changed to false for DJ events
-    location: "Hyderabad, Telangana",
-    title: "DFI Annual DJ Conference",
-    description:
-      "Empowering DJ Professionals for Success. This event offers valuable insights on mixing methodologies, client retention, and business growth.",
-    date: "December 21, 2025",
-  },
-  {
-    id: 3,
-    image:
-      "https://images.pexels.com/photos/1566412/pexels-photo-1566412.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    type: "DJ CLUB OWNERS MEETUP HYDERABAD",
-    DFIi: false, // Changed to false for DJ events
-    location: "Hyderabad, Telangana",
-    title: "DFI Annual Club Owners Meetup",
-    description:
-      "Shaping the Future of the DJ Business. This exclusive meetup brings together club owners, event organizers, and DJ entrepreneurs.",
-    date: "December 22, 2025",
-  },
-];
-
-/**
- * WhyChooseDFISlider Component
- * Manages and displays a sliding carousel of "Why Choose DFI" cards.
- * Shows 4 cards at a time, allowing navigation through 5 total cards.
- */
 
 const WhyChooseDFISlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -189,10 +143,6 @@ const WhyChooseDFISlider = () => {
   );
 };
 
-/**
- * Custom DFI Logo Component
- * This component renders the DFI logo using SVG, matching the requested design.
- */
 const DFILogo = ({ size = "20", className = "" }) => (
   <svg
     width={size}
@@ -202,23 +152,13 @@ const DFILogo = ({ size = "20", className = "" }) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    {/* Background Circle */}
     <circle cx="50" cy="50" r="50" fill="#2A2879" />{" "}
-    {/* Dark Blue background */}
-    {/* D */}
     <path
       d="M30 25H45C55 25 60 35 60 50C60 65 55 75 45 75H30V25Z"
-      fill="#E86E2C" /* Orange for 'D' */
+      fill="#E86E2C"
     />
-    {/* F */}
-    <path
-      d="M70 25H85V35H70V50H82V60H70V75H65V25H70Z"
-      fill="#FCD41B" /* Yellow/Orange for 'F' */
-    />
-    {/* I */}
+    <path d="M70 25H85V35H70V50H82V60H70V75H65V25H70Z" fill="#FCD41B" />
     <rect x="90" y="25" width="5" height="50" fill="#4CAF50" />{" "}
-    {/* Green for 'I' */}
-    {/* Text "DJ" */}
     <text
       x="50"
       y="80"
@@ -230,7 +170,6 @@ const DFILogo = ({ size = "20", className = "" }) => (
     >
       DJ
     </text>
-    {/* Text "FEDERATION OF INDIA" */}
     <text
       x="50"
       y="95"
@@ -244,9 +183,6 @@ const DFILogo = ({ size = "20", className = "" }) => (
   </svg>
 );
 
-/**
- * Inline Shield Icon SVG
- */
 const IconShield = ({ className = "text-blue-600 text-3xl" }) => (
   <svg
     className={className}
@@ -258,9 +194,6 @@ const IconShield = ({ className = "text-blue-600 text-3xl" }) => (
   </svg>
 );
 
-/**
- * Inline Chart Line Icon SVG
- */
 const IconChartLine = ({ className = "text-blue-600 text-3xl" }) => (
   <svg
     className={className}
@@ -292,6 +225,15 @@ const IconGlobe = ({ className = "text-blue-600 text-3xl" }) => (
  */
 const Home = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [upcomingEvents, setupComingEvents] = useState([]);
+
+  const dispatch = useDispatch();
+  const { events, loading, error } = useSelector((state) => state.events);
+
+  useEffect(() => {
+    dispatch(fetchEvents());
+    setupComingEvents(events.data);
+  }, [dispatch]);
 
   // Auto-advance carousel every 5 seconds
   useEffect(() => {
@@ -609,58 +551,64 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {upcomingEvents.map((event) => (
-              <div
-                key={event.id}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col h-full"
-              >
-                <div className="relative h-52 overflow-hidden">
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-full object-cover brightness-75"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-4 left-4 bg-white bg-opacity-90 text-[#E86E2C] px-3 py-1 rounded-md font-semibold text-sm uppercase">
-                    {event.type}
-                  </div>
-                  {event.DFIi && (
-                    <div className="absolute bottom-3 right-3 w-12 h-12 bg-white rounded-md flex items-center justify-center text-lg font-bold leading-none shadow-sm">
-                      <span className="text-orange-500 text-base">ff</span>
-                      <span className="text-[#2E2D6F] text-base">i</span>
-                      <span className="text-green-600 text-base">i</span>
+              <Link to={`event/${event._id}`} key={event._id}>
+                <div
+                  key={event._id}
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col h-full"
+                >
+                  <div className="relative h-52 overflow-hidden">
+                    <img
+                      src={event.image}
+                      alt={event.name}
+                      className="w-full h-full object-cover brightness-75"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-4 left-4 bg-white bg-opacity-90 text-[#E86E2C] px-3 py-1 rounded-md font-semibold text-sm uppercase">
+                      {event.type}
                     </div>
-                  )}
-                  {!event.DFIi && ( // Render DFI logo if not DFIi event
-                    <div className="absolute bottom-3 right-3">
-                      <DFILogo size="48" className="w-12 h-12" />
+                    {
+                      <div className="absolute bottom-3 right-3 w-12 h-12 bg-white rounded-md flex items-center justify-center text-lg font-bold leading-none shadow-sm">
+                        <span className="text-orange-500 text-base">df</span>
+                        <span className="text-[#2E2D6F] text-base">i</span>
+                        <span className="text-green-600 text-base">i</span>
+                      </div>
+                    }
+                    {!event.DFIi && ( // Render DFI logo if not DFIi event
+                      <div className="absolute bottom-3 right-3">
+                        <DFILogo size="48" className="w-12 h-12" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-6 flex flex-col justify-between flex-grow">
+                    <div>
+                      <p className="text-gray-600 text-sm mb-1">
+                        <span className="mr-2">&#x1F4CD;</span>
+                        {event.location.city + "," + event.location.country}
+                      </p>
+                      <h3 className="font-bold text-xl text-gray-800 mb-2">
+                        {event.name}
+                      </h3>
+                      <p className="text-gray-600 text-base mb-4">
+                        {event.description}
+                      </p>
+                      <p className="text-[#E86E2C] font-semibold mb-4">
+                        <span className="mr-2">&#x1F4C5;</span>
+                        {new Date(event.startDate).toLocaleDateString("en-US", {
+                          weekday: "long", 
+                          year: "numeric", 
+                          month: "long",
+                          day: "numeric", 
+                        })}
+                      </p>
                     </div>
-                  )}
-                </div>
-                <div className="p-6 flex flex-col justify-between flex-grow">
-                  <div>
-                    <p className="text-gray-600 text-sm mb-1">
-                      <span className="mr-2">&#x1F4CD;</span>
-                      {event.location}
-                    </p>
-                    <h3 className="font-bold text-xl text-gray-800 mb-2">
-                      {event.title}
-                    </h3>
-                    <p className="text-gray-600 text-base mb-4">
-                      {event.description}
-                    </p>
-                    <p className="text-[#E86E2C] font-semibold mb-4">
-                      <span className="mr-2">&#x1F4C5;</span>
-                      {event.date}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    {/* This button retains its original hover state */}
-                    <button className="px-6 py-2 bg-[#E86E2C] text-white rounded-lg font-semibold shadow-md hover:bg-orange-700 transition-colors duration-200">
-                      ATTEND
-                    </button>
+                    <div className="text-right">
+                      <button className="px-6 py-2 bg-[#E86E2C] text-white rounded-lg font-semibold shadow-md hover:bg-orange-700 transition-colors duration-200">
+                        ATTEND
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

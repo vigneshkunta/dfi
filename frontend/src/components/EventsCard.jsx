@@ -9,11 +9,11 @@ const EventsCard = ({
   description,
   date,
   button,
-  id,
+  _id,
 }) => {
   const navigate = useNavigate();
   return (
-    <Link to={`/event/${id}`} className="block no-underline">
+    <Link to={`/event/${_id}`} className="block no-underline">
       <article className="bg-white shadow-md p-5 rounded-xl transition hover:shadow-lg flex flex-col justify-between h-full">
         {/* Image or Placeholder */}
         {image ? (
@@ -33,7 +33,7 @@ const EventsCard = ({
         <div className="flex-1">
           <p className="text-green-600 font-medium flex items-center gap-1 mb-1">
             <FaMapMarkerAlt className="text-sm" />
-            {location}
+            {location.city}, {location.country}
           </p>
           <h3 className="text-xl font-bold text-[#23224A] leading-snug mb-2">
             {title}

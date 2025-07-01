@@ -2,34 +2,19 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import coursesBgWebp from "../assets/DJING/coursesBgWebp.webp";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCourses } from "../redux/courses/coursesSlice";
 import { Link, useNavigate } from "react-router-dom";
 
 const PublicCourses = () => {
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { courses: { data: courses } , loading, error } = useSelector((state) => state.courses);
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const res = await axios.get("/api/course/");
-        console.log("API Response:", res.data);
-        const courseArray = Array.isArray(res.data)
-          ? res.data
-          : res.data.data || [];
-        setCourses(courseArray);
-      } catch (err) {
-        console.error("Error fetching courses:", err);
-        setError("Failed to load courses.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCourses();
-  }, []);
+    dispatch(fetchCourses());
+  }, [dispatch]);
 
   return (
     <main className="bg-white text-gray-900 font-sans">
@@ -89,7 +74,11 @@ const PublicCourses = () => {
           <p className="col-span-full text-center text-red-500">{error}</p>
         ) : Array.isArray(courses) && courses.length > 0 ? (
           courses.map((course) => (
-            <Link to={`/course/${course._id || course.id}`} key={course._id || course.id} className="no-underline">
+            <Link
+              to={`/course/${course._id || course.id}`}
+              key={course._id || course.id}
+              className="no-underline"
+            >
               <article
                 key={course._id || course.id}
                 className="group bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col p-3 transform transition-transform duration-300 ease-out hover:-translate-y-2 hover:shadow-lg"
