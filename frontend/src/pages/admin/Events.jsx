@@ -3,7 +3,7 @@ import axios from "axios";
 import { CircularProgressbar } from "react-circular-progressbar"; 
 import "react-circular-progressbar/dist/styles.css"; 
 import { useDispatch } from "react-redux";
-import { fetchEvents } from "../../redux/events/eventSlice";
+import { fetchEvents } from "../../redux/events/eventsSlice";
 
 const Events = () => {
   const [formData, setFormData] = useState({
