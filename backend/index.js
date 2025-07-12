@@ -9,6 +9,7 @@ import courseRoutes from './routes/course.routes.js';
 import eventRoutes from './routes/event.routes.js';
 import licenseRoutes from './routes/license.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
+import paymentRoutes from './routes/payment.routes.js';
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.use("/api/course", courseRoutes);
 app.use("/api/event", eventRoutes);
 app.use("/api/license", licenseRoutes);
 app.use("/api", uploadRoutes);
+app.use('/api/payment', paymentRoutes);
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "frontend", "dist")));

@@ -44,7 +44,7 @@ export const updateCourse = asyncHandler(async (req, res) => {
 export const deleteCourse = asyncHandler(async (req, res) => {
   const course = await Course.findById(req.params.id);
   if (!course)
-    return res.status(404).json(new ApiResponse(404, "Course not found"));
+    return res.status(404).json(new ApiError(404, "Course not found"));
 
   if (
     course.user.toString() !== req.user._id.toString() &&
@@ -65,7 +65,7 @@ export const getCourses = asyncHandler(async (req, res) => {
 export const getCourseById = asyncHandler(async (req, res) => {
   const course = await Course.findById(req.params.id);
   if (!course)
-    return res.status(404).json(new ApiResponse(404, "Course not found"));
+    return res.status(404).json(new ApiError(404, "Course not found"));
 
   res.status(200).json(new ApiResponse(200, course));
 });

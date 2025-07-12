@@ -47,11 +47,13 @@ const userSchema = new Schema(
     },
     profilePic: {
       type: String,
-      default: "https://image.shutterstock.com/image-vector/avatar-gender-neutral-silhouette-vector-260nw-2470054311.jpg",
+      default:
+        "https://image.shutterstock.com/image-vector/avatar-gender-neutral-silhouette-vector-260nw-2470054311.jpg",
     },
     coverPic: {
       type: String,
-      default: "http://brosmar.com/wp-content/plugins/uix-page-builder/uixpb_templates/images/UixPageBuilderTmpl/default-cover-2.jpg",
+      default:
+        "http://brosmar.com/wp-content/plugins/uix-page-builder/uixpb_templates/images/UixPageBuilderTmpl/default-cover-2.jpg",
     },
     bio: {
       type: String,
@@ -67,71 +69,40 @@ const userSchema = new Schema(
         ref: "Course",
       },
     ],
-    activeCourses: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Course",
-      },
-    ],
     enrolledCourses: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Course",
+        course: { type: Schema.Types.ObjectId, ref: "Course" },
+        validUntil: { type: Date },
       },
     ],
-    completedCourses: [
+    purchasedLicenses: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Course",
+        license: { type: Schema.Types.ObjectId, ref: "License" },
+        validUntil: { type: Date },
+        purchasedAt: { type: Date, default: Date.now },
       },
     ],
-    reviews: [
+    eventTickets: [
       {
-        course: {
-          type: Schema.Types.ObjectId,
-          ref: "Course",
-        },
-        rating: {
-          type: Number,
-          min: 1,
-          max: 5,
-        },
-        comment: {
-          type: String,
-        },
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
+        event: { type: Schema.Types.ObjectId, ref: "Event" },
+        ticketId: { type: String },
+        issuedAt: { type: Date, default: Date.now },
+        validUntil: { type: Date },
+        ticketData: { type: String }, // could be base64 or URL or stringified HTML
       },
     ],
-    orderHistory: [
+
+    paymentHistory: [
       {
-        course: {
-          type: Schema.Types.ObjectId,
-          ref: "Course",
-        },
-        purchasedAt: {
-          type: Date,
-          default: Date.now,
-        },
-        price: {
-          type: Number,
-        },
+        type: { type: String, enum: ["course", "license", "event"] },
+        item: { type: Schema.Types.ObjectId, refPath: "paymentHistory.type" },
+        amount: { type: Number },
+        paidAt: { type: Date, default: Date.now },
+        validUntil: { type: Date },
+        receiptId: { type: String },
       },
     ],
-    shoppingCart: [
-      {
-        course: {
-          type: Schema.Types.ObjectId,
-          ref: "Course",
-        },
-        addedAt: {
-          type: Date,
-          default: Date.now,
-        },
-      },
-    ],
+
     socialLinks: {
       facebook: {
         type: String,
@@ -194,5 +165,22 @@ userSchema.methods.generateAccessToken = function () {
     process.env.ACCESS_TOKEN_SECRET
   );
 };
+
+userSchema.methods.cleanExpiredItems = function () {
+  const now = new Date();
+
+  this.enrolledCourses = this.enrolledCourses.filter(
+    (entry) => !entry.validUntil || entry.validUntil > now
+  );
+
+  this.purchasedLicenses = this.purchasedLicenses.filter(
+    (entry) => !entry.validUntil || entry.validUntil > now
+  );
+
+  this.eventTickets = this.eventTickets.filter(
+    (entry) => !entry.validUntil || entry.validUntil > now
+  );
+};
+
 
 export const User = mongoose.model("User", userSchema);

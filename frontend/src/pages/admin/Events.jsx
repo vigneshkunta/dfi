@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { CircularProgressbar } from "react-circular-progressbar"; // for progress bar
-import "react-circular-progressbar/dist/styles.css"; // for progress bar styles
+import { CircularProgressbar } from "react-circular-progressbar"; 
+import "react-circular-progressbar/dist/styles.css"; 
+import { useDispatch } from "react-redux";
+import { fetchEvents } from "../../redux/events/eventSlice";
 
 const Events = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +18,8 @@ const Events = () => {
     price: "",
     ticketsPublished: false,
   });
+
+  const dispatch = useDispatch();
 
   // Image upload states
   const [imageFile, setImageFile] = useState(null);
@@ -111,6 +115,7 @@ const Events = () => {
       });
       alert("Event created successfully!");
       console.log(res.data);
+      dispatch(fetchEvents());
     } catch (error) {
       alert("Error: " + (error.response?.data?.message || error.message));
     }

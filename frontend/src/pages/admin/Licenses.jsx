@@ -208,6 +208,9 @@ const Licenses = () => {
         >
           <option value="year">Year</option>
           <option value="month">Month</option>
+          <option value="half-year">Half-Year</option>
+          <option value="quarter">Quarter</option>
+          <option value="lifetime">Lifetime</option>
         </select>
         <button
           type="submit"

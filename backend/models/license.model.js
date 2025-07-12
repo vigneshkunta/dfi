@@ -22,7 +22,7 @@ const licenseSchema = new Schema(
     duration: {
       type: String,
       required: true,
-      enum : ["year", "month"]
+      enum : ["year", "month","half-year","quarter","lifetime"],
     },
   },
   {

@@ -22,18 +22,21 @@ const courseSchema = new Schema(
       ref: "User",
       required: true,
     },
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    duration : {
+      type: Number,  // Duration in number of days
+      required: true,
+    },
     instructors: [
       {
         type: Schema.Types.ObjectId,
         ref: "User",
       },
     ],
-    ratings: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 5,
-    },
     about: {
       type: String,
       required: true,
@@ -51,29 +54,6 @@ const courseSchema = new Schema(
       required: true,
       default: false,
     },
-    reviews: [
-      {
-        user: {
-          type: Schema.Types.ObjectId,
-          ref: "User",
-          required: true,
-        },
-        rating: {
-          type: Number,
-          required: true,
-          min: 1,
-          max: 5,
-        },
-        review: {
-          type: String,
-          required: true,
-        },
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
-      },
-    ],
     noOfStudentsEnrolled: {
       type: Number,
       default: 0,

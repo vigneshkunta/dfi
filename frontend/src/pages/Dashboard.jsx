@@ -37,9 +37,9 @@ export default function Dashboard() {
     },
     { label: "Wishlist", icon: <BookOpen />, path: "/dashboard/wishlist" },
     {
-      label: "Order History",
+      label: "Purchase History",
       icon: <ShoppingBag />,
-      path: "/dashboard/orders",
+      path: "/dashboard/purchases",
     },
     { label: "Logout", icon: <LogOut /> },
   ];

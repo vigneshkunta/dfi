@@ -20,7 +20,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 const EnrolledCourses = lazy(() => import("./pages/EnrolledCourses"));
 const Wishlist = lazy(() => import("./pages/Wishlist"));
 const Reviews = lazy(() => import("./pages/Reviews"));
-const OrderHistory = lazy(() => import("./pages/OrderHistory"));
+const PurchaseHistory = lazy(() => import("./pages/PurchaseHistory"));
 
 const Licenses = lazy(() => import("./pages/admin/Licenses"));
 const Courses = lazy(() => import("./pages/admin/Courses"));
@@ -88,18 +88,10 @@ export default function App() {
               }
             />
             <Route
-              path="reviews"
+              path="purchases"
               element={
                 <PrivateRoute>
-                  <Reviews />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="orders"
-              element={
-                <PrivateRoute>
-                  <OrderHistory />
+                  <PurchaseHistory />
                 </PrivateRoute>
               }
             />

@@ -9,6 +9,8 @@ const Courses = () => {
     title: "",
     category: "",
     teacher: "",
+    duration: 0,
+    price: 0,
     instructors: [],
     about: "",
     objective: "",
@@ -20,7 +22,12 @@ const Courses = () => {
   const [users, setUsers] = useState([]);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
+
+  // Upload states
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
+  const [imageFileUploadError, setImageFileUploadError] = useState(null);
+  const [imageFileUploading, setImageFileUploading] = useState(false);
+
   const filePickerRefImage = useRef();
 
   useEffect(() => {
@@ -39,6 +46,13 @@ const Courses = () => {
       });
   }, []);
 
+  // Upload image when imageFile changes
+  useEffect(() => {
+    if (imageFile) {
+      uploadImage();
+    }
+  }, [imageFile]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
@@ -49,10 +63,7 @@ const Courses = () => {
   };
 
   const handleInstructorsChange = (e) => {
-    const options = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
+    const options = Array.from(e.target.selectedOptions, (option) => option.value);
     setFormData({ ...formData, instructors: options });
   };
 
@@ -73,21 +84,63 @@ const Courses = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setImageFile(file);
-    setImageFileUrl(URL.createObjectURL(file));
+    if (file) {
+      setImageFile(file);
+      setImageFileUrl(URL.createObjectURL(file)); // preview
+    }
+  };
+
+  const uploadImage = async () => {
+    setImageFileUploading(true);
+    setImageFileUploadError(null);
+    setImageFileUploadProgress(0);
+
+    const formDataForUpload = new FormData();
+    formDataForUpload.append("file", imageFile);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataForUpload,
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Upload failed");
+      }
+
+      // Simulate progress
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 10;
+        if (progress <= 100) {
+          setImageFileUploadProgress(progress);
+        } else {
+          clearInterval(interval);
+        }
+      }, 100);
+
+      const data = await res.json();
+      setImageFileUrl(data.data.url);
+      setFormData((prevData) => ({ ...prevData, image: data.data.url }));
+    } catch (err) {
+      setImageFileUploadError(err.message);
+      setImageFile(null);
+      setImageFileUrl("");
+    } finally {
+      setImageFileUploading(false);
+      setImageFileUploadProgress(null);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const courseData = {
-      ...formData,
-      image: imageFileUrl,
-    };
-
     try {
-      await axios.post("/api/course", courseData);
+      await axios.post("/api/course", formData);
       alert("Course created!");
+      // Optionally reset form here
     } catch (err) {
       alert(err.response?.data?.message || "Error creating course");
     }
@@ -161,6 +214,9 @@ const Courses = () => {
           ref={filePickerRefImage}
           style={{ display: "none" }}
         />
+        {imageFileUploadError && (
+          <div className="text-red-500 text-sm mb-2">{imageFileUploadError}</div>
+        )}
         <p className="text-sm text-gray-500">Click to upload an image</p>
 
         <input
@@ -199,6 +255,26 @@ const Courses = () => {
               </option>
             ))}
         </select>
+
+        <input
+          type="number"
+          name="duration"
+          placeholder="Duration (in days)"
+          value={formData.duration}
+          onChange={handleChange}
+          className="border p-2"
+          required
+        />
+
+        <input
+          type="number"
+          name="price"
+          placeholder="Price"
+          value={formData.price}
+          onChange={handleChange}
+          className="border p-2"
+          required
+        />
 
         <label className="text-gray-600 font-medium">Select Instructors</label>
         <select
@@ -286,6 +362,7 @@ const Courses = () => {
         <button
           type="submit"
           className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 mt-4"
+          disabled={imageFileUploading} 
         >
           Submit Course
         </button>

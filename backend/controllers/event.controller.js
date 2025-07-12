@@ -39,7 +39,7 @@ export const updateEvent = asyncHandler(async (req, res) => {
 export const deleteEvent = asyncHandler(async (req, res) => {
   const event = await Event.findById(req.params.id);
   if (!event)
-    return res.status(404).json(new ApiResponse(404, "Event not found"));
+    return res.status(404).json(new ApiError(404, "Event not found"));
 
   if (
     event.user.toString() !== req.user._id.toString() &&

@@ -5,6 +5,7 @@ import {
   logoutUser, 
   updateUser,
   getAllUsers,
+  fetchCurrentUser
 } from '../controllers/user.controller.js';
 import { verifyJWT } from "../middleware/auth.middleware.js";
 const router = Router();
@@ -17,5 +18,6 @@ router.post('/login', loginUser);
 router.post('/logout', logoutUser);
 router.put('/update', verifyJWT, updateUser);
 router.get("/all", verifyJWT, getAllUsers);
+router.get("/me", verifyJWT, fetchCurrentUser);
 
 export default router;

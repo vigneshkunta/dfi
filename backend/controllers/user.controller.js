@@ -62,6 +62,9 @@ export const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Invalid password");
   }
 
+  user.cleanExpiredItems();
+  await user.save();
+
   const accessToken = user.generateAccessToken();
 
   const options = {
@@ -125,4 +128,17 @@ export const updateUser = asyncHandler(async (req, res) => {
 export const getAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find().select("-password"); 
   res.json(new ApiResponse(200, users, "Fetched all users"));
+});
+
+export const fetchCurrentUser = asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+
+  if (!userId) {
+    return res
+      .status(401)
+      .json(new ApiError(401, "Unauthorized: User ID not found"));
+  }
+
+  const user = await User.findById(userId).select("-password");
+  res.json(new ApiResponse(200, user, "Fetched current user"));
 });

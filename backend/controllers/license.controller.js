@@ -44,7 +44,7 @@ export const updateLicense = asyncHandler(async (req, res) => {
 export const deleteLicense = asyncHandler(async (req, res) => {
   const license = await License.findById(req.params.id);
   if (!license)
-    return res.status(404).json(new ApiResponse(404, "License not found"));
+    return res.status(404).json(new ApiError(404, "License not found"));
 
   if (
     license.user.toString() !== req.user._id.toString() &&
@@ -65,7 +65,7 @@ export const getLicenses = asyncHandler(async (req, res) => {
 export const getLicenseById = asyncHandler(async (req, res) => {
   const license = await License.findById(req.params.id);
   if (!license)
-    return res.status(404).json(new ApiResponse(404, "License not found"));
+    return res.status(404).json(new ApiError(404, "License not found"));
 
   res.status(200).json(new ApiResponse(200, license));
 });
